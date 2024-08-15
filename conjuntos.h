@@ -7,6 +7,13 @@
 #include <vector>
 #include <set>
 
+#define ERR_BAD_ARGS 1
+#define ERR_OPEN_FILE 2
+#define ERR_BAD_MAX_NUM_OF_OPS 3
+#define ERR_UNKNOWN_TOKEN 4
+#define ERR_OPS_LIMIT 5
+#define ERR_READING_SET 6
+
 #define UNION_OP "U"
 #define INTERSECTION_OP "I"
 #define DIFFERENCE_OP "D"

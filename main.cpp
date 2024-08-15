@@ -2,12 +2,6 @@
  * Nome: Renan da Silva Oliveira Andrade
  */
 
-#define ERR_BAD_ARGS 1
-#define ERR_OPEN_FILE 2
-#define ERR_BAD_MAX_NUM_OF_OPS 3
-#define ERR_UNKNOWN_TOKEN 4
-#define ERR_OPS_LIMIT 5
-
 #include "conjuntos.h"
 
 int MAX_NUM_OF_OPS = 0;
@@ -31,7 +25,7 @@ int main(int argc, char **argv)
 
     in_file >> MAX_NUM_OF_OPS;
 
-    if (MAX_NUM_OF_OPS == 0)
+    if (MAX_NUM_OF_OPS <= 0)
     {
         std::cout << "Erro: número de operações inválido (lido: " << MAX_NUM_OF_OPS << ")\n";
         exit(ERR_BAD_MAX_NUM_OF_OPS);

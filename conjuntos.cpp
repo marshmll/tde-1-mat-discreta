@@ -6,7 +6,13 @@ std::set<std::string> read_set(std::ifstream &in_file)
 
     while (line.size() == 0)
     {
-        std::getline(in_file, line);
+        if (!std::getline(in_file, line))
+        {
+            std::cerr << "Erro: Impossível ler próximo conjunto, chegou ao fim do arquivo." << "\n"
+                      << "Encerrando." << "\n";
+
+            exit(ERR_READING_SET);
+        }
     }
 
     size_t line_size = line.size();
