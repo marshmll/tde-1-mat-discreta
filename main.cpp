@@ -4,12 +4,13 @@
 
 #define ERR_BAD_ARGS 1
 #define ERR_OPEN_FILE 2
-#define ERR_BAD_NUM_OF_OPS 3
-#define ERR_OPS_LIMIT 4
+#define ERR_BAD_MAX_NUM_OF_OPS 3
+#define ERR_UNKNOWN_TOKEN 4
+#define ERR_OPS_LIMIT 5
 
 #include "conjuntos.h"
 
-int NUM_OF_OPS = 0;
+int MAX_NUM_OF_OPS = 0;
 
 int main(int argc, char **argv)
 {
@@ -28,15 +29,15 @@ int main(int argc, char **argv)
         exit(ERR_OPEN_FILE);
     }
 
-    in_file >> NUM_OF_OPS;
+    in_file >> MAX_NUM_OF_OPS;
 
-    if (NUM_OF_OPS == 0)
+    if (MAX_NUM_OF_OPS == 0)
     {
-        std::cout << "Erro: número de operações inválido (lido: " << NUM_OF_OPS << ")\n";
-        exit(ERR_BAD_NUM_OF_OPS);
+        std::cout << "Erro: número de operações inválido (lido: " << MAX_NUM_OF_OPS << ")\n";
+        exit(ERR_BAD_MAX_NUM_OF_OPS);
     }
 
-    int current_op_count = 1;
+    int current_op_count = 0;
     std::string buffer;
 
     while (std::getline(in_file, buffer))
@@ -45,9 +46,9 @@ int main(int argc, char **argv)
         {
             continue;
         }
-        else if (current_op_count > NUM_OF_OPS)
+        else if (current_op_count == MAX_NUM_OF_OPS)
         {
-            std::cerr << "Erro: número de operações excedida (esperado: " << NUM_OF_OPS << ")" << "\n"
+            std::cerr << "Erro: número de operações excedida (esperado: " << MAX_NUM_OF_OPS << ")" << "\n"
                       << "Encerrando." << "\n";
             exit(ERR_OPS_LIMIT);
         }
@@ -93,13 +94,15 @@ int main(int argc, char **argv)
         }
         else
         {
-            std::cerr << "Identificador desconhecido: " << buffer << "\n";
+            std::cerr << "Erro: Identificador desconhecido: " << buffer << "\n"
+                      << "Encerrando." << "\n";
+            exit(ERR_UNKNOWN_TOKEN);
         }
     }
 
-    if (current_op_count < NUM_OF_OPS)
+    if (current_op_count < MAX_NUM_OF_OPS)
     {
-        std::cerr << "Erro: número de operações abaixo do esperado (esperado: " << NUM_OF_OPS << ", encontrado: " << current_op_count << ")\n"
+        std::cerr << "Erro: número de operações abaixo do esperado (esperado: " << MAX_NUM_OF_OPS << ", encontrado: " << current_op_count << ")\n"
                   << "Encerrando." << "\n";
         exit(ERR_OPS_LIMIT);
     }
