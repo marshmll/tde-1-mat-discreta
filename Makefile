@@ -1,4 +1,4 @@
 all: conjuntos
 
-conjuntos : conjuntos.cpp
-	g++ $< -o $@
+conjuntos : main.cpp conjuntos.cpp
+	g++ main.cpp conjuntos.cpp -o conjuntos
