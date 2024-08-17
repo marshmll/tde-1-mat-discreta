@@ -116,11 +116,11 @@ int main(int argc, char **argv)
             // Incrementa o contador.
             ++current_op_count;
 
-            std::set<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
-            std::set<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
+            std::vector<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
+            std::vector<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
 
             // Calcula a união dos dois conjuntos lido.
-            std::set<std::string> union_set = calc_union(set_one, set_two);
+            std::vector<std::string> union_set = calc_union(set_one, set_two);
 
             // Mostra o resultado formatado como o especificado no enunciado.
             std::cout << "União: conjunto 1 " << stringfy_set(set_one) << ", conjunto 2 " <<
@@ -131,11 +131,11 @@ int main(int argc, char **argv)
         {
             ++current_op_count;
 
-            std::set<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
-            std::set<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
+            std::vector<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
+            std::vector<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
             
             // Calcula a intersecção dos dois conjuntos lido.
-            std::set<std::string> intersection_set = calc_intersection(set_one, set_two);
+            std::vector<std::string> intersection_set = calc_intersection(set_one, set_two);
 
             // Mostra o resultado formatado como o especificado no enunciado.
             std::cout << "Intersecção: conjunto 1 " << stringfy_set(set_one) << ", conjunto 2 " <<
@@ -146,11 +146,11 @@ int main(int argc, char **argv)
         {
             ++current_op_count;
 
-            std::set<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
-            std::set<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
+            std::vector<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
+            std::vector<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
             
             // Calcula a diferença dos dois conjuntos lido.
-            std::set<std::string> difference_set = calc_difference(set_one, set_two);
+            std::vector<std::string> difference_set = calc_difference(set_one, set_two);
 
             // Mostra o resultado formatado como o especificado no enunciado.
             std::cout << "Diferença: conjunto 1 " << stringfy_set(set_one) << ", conjunto 2 " <<
@@ -161,11 +161,11 @@ int main(int argc, char **argv)
         {
             ++current_op_count;
 
-            std::set<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
-            std::set<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
+            std::vector<std::string> set_one = read_set(in_file); // Lê o primeiro conjunto.
+            std::vector<std::string> set_two = read_set(in_file); // Lê o segundo conjunto.
             
             // Calcula a produto cartesiano dos dois conjuntos lido.
-            std::set<std::pair<std::string, std::string>> cartesian_set = calc_cartesian_product(set_one, set_two);
+            std::vector<std::pair<std::string, std::string>> cartesian_set = calc_cartesian_product(set_one, set_two);
 
             // Mostra o resultado formatado como o especificado no enunciado.
             std::cout << "Produto Cartesiano: conjunto 1 " << stringfy_set(set_one) <<

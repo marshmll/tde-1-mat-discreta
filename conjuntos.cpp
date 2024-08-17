@@ -7,7 +7,7 @@
 // permitido qualquer símbolo que não seja um espaço ou tab.
 // Elementos em branco são ignorados.
 // Espaços em branco entre um único elemento também são ignorados.
-std::set<std::string> read_set(std::ifstream &in_file)
+std::vector<std::string> read_set(std::ifstream &in_file)
 {
     // Armazena a linha
     std::string line;
@@ -15,7 +15,7 @@ std::set<std::string> read_set(std::ifstream &in_file)
     // Lê a próxima linha que não esteja em branco.
     while (line.size() == 0)
     {
-        // Se chegou ao fum do arquivo, finaliza o programa com código de erro.
+        // Se chegou ao fim do arquivo, finaliza o programa com código de erro.
         if (!std::getline(in_file, line))
         {
             std::cerr << "Erro: Impossível ler próximo conjunto, chegou ao fim do arquivo." << "\n"
@@ -32,7 +32,7 @@ std::set<std::string> read_set(std::ifstream &in_file)
     std::string buffer;
 
     // Instância de um conjunto vazio.
-    std::set<std::string> set;
+    std::vector<std::string> set;
 
     // Itera por todos os caracteres da linha
     for (size_t i = 0; i < line_size; i++)
@@ -45,7 +45,7 @@ std::set<std::string> read_set(std::ifstream &in_file)
         if (c == ',')
         {
             if (buffer.size() != 0)
-                set.insert(buffer);
+                set.push_back(buffer);
 
             buffer.clear();
         }
@@ -56,9 +56,9 @@ std::set<std::string> read_set(std::ifstream &in_file)
         }
     }
 
-    // Insere o último elemento lido no buffer, se não for um espaço ou tab.
+    // Insere o último elemento lido do buffer, se não for um espaço ou tab.
     if (buffer.size() != 0)
-        set.insert(buffer);
+        set.push_back(buffer);
 
     // Retorna o conjunto lido
     return set;
@@ -66,18 +66,25 @@ std::set<std::string> read_set(std::ifstream &in_file)
 
 // Esta função formata um conjunto em uma string que pode ser printada.
 // Função sobrecarregada para conjunto de strings.
-const std::string stringfy_set(std::set<std::string> &set)
+const std::string stringfy_set(std::vector<std::string> &set)
 {
     std::string str = "{";
 
-    for (auto it = set.begin(); it != set.end(); ++it)
+    int elements_count = 0;
+
+    for (auto &element : set)
     {
-        str.append(*it);
+        str.append(element);
         str.append(", ");
+        ++elements_count;
     }
 
-    // Apaga o último ", " da string.
-    str.erase(str.size() - 2, 2);
+    // Se há elementos no conjunto
+    if (elements_count > 0)
+    {
+        // Apaga o último ", " da string.
+        str.erase(str.size() - 2, 2);
+    }
 
     str.push_back('}');
 
@@ -86,154 +93,115 @@ const std::string stringfy_set(std::set<std::string> &set)
 
 // Esta função formata um conjunto em uma string que pode ser printada.
 // Função sobrecarregada para conjunto de pares de strings.
-const std::string stringfy_set(std::set<std::pair<std::string, std::string>> &set)
+const std::string stringfy_set(std::vector<std::pair<std::string, std::string>> &set)
 {
     std::string str = "{";
-    std::vector<std::pair<std::string, std::string>> pairs;
 
-    for (auto it = set.begin(); it != set.end(); ++it)
-    {
-        pairs.push_back(*it);
-    }
-
-    for (auto &[value1, value2] : pairs)
+    int elements_count = 0;
+    for (auto &[value1, value2] : set)
     {
         str.append("(" + value1 + ", " + value2 + "), ");
+        ++elements_count;
     }
 
-    // Apaga o último ", " da string.
-    str.erase(str.size() - 2, 2);
+    // Se há elementos no conjunto
+    if (elements_count > 0)
+    {
+        // Apaga o último ", " da string.
+        str.erase(str.size() - 2, 2);
+    }
+
     str.push_back('}');
 
     return str;
 }
 
 // Esta função calcula a união de dois conjuntos e retorna um novo conjunto com o resultado.
-std::set<std::string> calc_union(std::set<std::string> &set_one, std::set<std::string> &set_two)
+std::vector<std::string> calc_union(std::vector<std::string> &set_one, std::vector<std::string> &set_two)
 {
-    // Vetor de strings temporário para armazenar o resultado.
-    // Aloca espaço suficiente para a soma das quantidades de elementos dos conjuntos.
-    std::vector<std::string> union_vec(set_one.size() + set_two.size());
+    // Inizializa a união com os valores do primeiro conjunto.
+    std::vector<std::string> union_set = set_one;
 
-    // Conjunto a ser retornado.
-    std::set<std::string> union_set;
-
-    // Itera sobre todos os elemento dos conjuntos e insere o resultado no vetor de strings.
-    // Utiliza std::set_union da biblioteca <set>
-    auto it = std::set_union(set_one.begin(), set_one.end(),
-                             set_two.begin(), set_two.end(),
-                             union_vec.begin());
-
-    // Redimensiona o vetor para o tamanho utilizado.
-    union_vec.resize(it - union_vec.begin());
-
-    // Insere os elementos dentro de um conjunto.
-    for (auto element : union_vec)
+    // Itera pelos elementos do segundo conjunto
+    for (auto &element : set_two)
     {
-        union_set.insert(element);
+        // Procura se o elemento já está na união
+        auto it = std::find(union_set.begin(), union_set.end(), element);
+
+        // Se o elemento não está no conjunto união, insere na união.
+        if (it == union_set.end())
+        {
+            union_set.push_back(element);
+        }
     }
 
-    // Retorna o conjunto construído.
+    // Retorna o conjunto união.
     return union_set;
 }
 
 // Esta função calcula a intersecção de dois conjuntos e retorna um novo conjunto com o resultado.
-std::set<std::string> calc_intersection(std::set<std::string> &set_one, std::set<std::string> &set_two)
+std::vector<std::string> calc_intersection(std::vector<std::string> &set_one, std::vector<std::string> &set_two)
 {
-    // Vetor de strings temporário para armazenar o resultado.
-    // Aloca espaço suficiente para a soma das quantidades de elementos dos conjuntos.
-    std::vector<std::string> intersection_vec(set_one.size() + set_two.size());
+    // Declara um conjunto para a intersecção.
+    std::vector<std::string> intersection_set;
 
-    // Conjunto a ser retornado.
-    std::set<std::string> intersection_set;
-
-    // Itera sobre todos os elemento dos conjuntos e insere o resultado no vetor de strings.
-    // Utiliza std::set_intersection da biblioteca <set>
-    auto it = std::set_intersection(set_one.begin(), set_one.end(),
-                                    set_two.begin(), set_two.end(),
-                                    intersection_vec.begin());
-
-    // Redimensiona o vetor para o tamanho utilizado.
-    intersection_vec.resize(it - intersection_vec.begin());
-
-    // Insere os elementos dentro de um conjunto.
-    for (auto element : intersection_vec)
+    // Itera pelos elementos do primeiro conjunto.
+    for (auto &element : set_one)
     {
-        intersection_set.insert(element);
+        // Procura se o elemento está presente no segundo conjunto.
+        auto it = std::find(set_two.begin(), set_two.end(), element);
+
+        // Se estiver, insere no conjunto intersecção.
+        if (it != set_two.end())
+        {
+            intersection_set.push_back(element);
+        }
     }
 
-    // Retorna o conjunto construído.
+    // Retorna o conjunto intersecção.
     return intersection_set;
 }
 
 // Esta função calcula a diferença de dois conjuntos e retorna um novo conjunto com o resultado.
-std::set<std::string> calc_difference(std::set<std::string> &set_one, std::set<std::string> &set_two)
+std::vector<std::string> calc_difference(std::vector<std::string> &set_one, std::vector<std::string> &set_two)
 {
-    // Vetor de strings temporário para armazenar o resultado.
-    // Aloca espaço suficiente para a soma das quantidades de elementos dos conjuntos.
-    std::vector<std::string> difference_vec(set_one.size() + set_two.size());
+    // Declara um conjunto para a diferença.
+    std::vector<std::string> difference_set;
 
-    // Conjunto a ser retornado.
-    std::set<std::string> difference_set;
-
-    // Itera sobre todos os elemento dos conjuntos e insere o resultado no vetor de strings.
-    // Utiliza std::set_difference da biblioteca <set>
-    auto it = std::set_difference(set_one.begin(), set_one.end(),
-                                  set_two.begin(), set_two.end(),
-                                  difference_vec.begin());
-
-    // Redimensiona o vetor para o tamanho utilizado.
-    difference_vec.resize(it - difference_vec.begin());
-
-    // Insere os elementos dentro de um conjunto.
-    for (auto element : difference_vec)
+    // Itera por cada elemento do primeiro conjunto.
+    for (auto &element : set_one)
     {
-        difference_set.insert(element);
-    }
+        // Procura pelo elemento no segundo conjunto
+        auto it = std::find(set_two.begin(), set_two.end(), element);
 
-    // Retorna o conjunto construído.
-    return difference_set;
-}
-
-std::set<std::pair<std::string, std::string>> calc_cartesian_product(std::set<std::string> &set_one, std::set<std::string> &set_two)
-{
-    // Vetores para armazenar os elementos dos conjuntos fornecidos.
-    std::vector<std::string> set_one_vec;
-    std::vector<std::string> set_two_vec;
-
-    // Conjunto a ser retornado.
-    std::set<std::pair<std::string, std::string>> cartesian_set;
-
-    // Itera pelo primeiro conjunto e armazena os elementos no primeiro vetor.
-    for (auto it = set_one.begin(); it != set_one.end(); ++it)
-    {
-        set_one_vec.push_back(*it);
-    }
-
-    // Itera pelo segundo conjunto e armazena os elementos no segundo vetor.
-    for (auto it = set_two.begin(); it != set_two.end(); ++it)
-    {
-        set_two_vec.push_back(*it);
-    }
-
-    // Armazena o tamanho dos dois vetores.
-    const int set_one_size = set_one_vec.size();
-    const int set_two_size = set_two_vec.size();
-
-    // Itera por cada elemento do primeiro vetor
-    for (int i = 0; i < set_one_size; ++i)
-    {
-        // Itera por cada elemento do segundo vetor
-        for (int j = 0; j < set_two_size; ++j)
+        // Se o elemento não estiver presente, insere no conjunto diferença.
+        if (it == set_two.end())
         {
-            // Cria os pares ordenados combinando cada elemento de A[i] com cada elemento de B[j]
-            std::pair<std::string, std::string> pair = {set_one_vec.at(i), set_two_vec.at(j)};
-
-            // Insere o par ordenado no conjunto.
-            cartesian_set.insert(pair);
+            difference_set.push_back(element);
         }
     }
 
-    // Retorna o conjunto construído.
+    // Retorna o conjunto diferença.
+    return difference_set;
+}
+
+std::vector<std::pair<std::string, std::string>>
+calc_cartesian_product(std::vector<std::string> &set_one, std::vector<std::string> &set_two)
+{
+    // Declara um conjunto para o produto cartesiano.
+    std::vector<std::pair<std::string, std::string>> cartesian_set;
+
+    // Itera pelos elementos do primeiro conjunto
+    for (auto &element_one : set_one)
+    {
+        // Itera pelos elementos do segundo conjunto
+        for (auto &element_two : set_two)
+        {
+            // Insere no conjunto produto cartesiano os pares ordenados de A->B
+            cartesian_set.push_back({element_one, element_two});
+        }
+    }
+
+    // Retorna o conjunto produto cartesiano.
     return cartesian_set;
 }
