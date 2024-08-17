@@ -174,7 +174,7 @@ int main(int argc, char **argv)
         // Significa que leu um identificador estranho. Finaliza o programa com código de erro.
         else
         {
-            std::cerr << "Erro: Identificador desconhecido: " << buffer << "\n"
+            std::cerr << "Erro: operador desconhecido: " << buffer << "\n"
                       << "Encerrando." << "\n";
             exit(ERR_UNKNOWN_TOKEN);
         }
