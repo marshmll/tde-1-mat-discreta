@@ -1,6 +1,9 @@
-# Nome: Renan da Silva Oliveira Andrade
+#Nome: Renan da Silva Oliveira Andrade
 
-all: conjuntos
+all: main
 
-conjuntos : main.cpp conjuntos.cpp
-	g++ main.cpp conjuntos.cpp -o conjuntos
+main: main.cpp conjuntos.cpp
+	g++ main.cpp conjuntos.cpp -o $@
+
+clean:
+	rm main

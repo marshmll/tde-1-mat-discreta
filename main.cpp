@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     // Verifica se o executável possui apenas 1 argumento, se não, finaliza com código de erro.
     if (argc != 2)
     {
-        std::cerr << "Modo de uso: ./conjuntos <arquivo>" << "\n";
+        std::cerr << "Modo de uso: " << argv[0] << " <arquivo>" << "\n";
         exit(ERR_BAD_ARGS);
     }
 
