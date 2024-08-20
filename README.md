@@ -10,7 +10,7 @@ Caso deseje utilizar outro compilador, como `cl` ou `clang`, compile manualmente
 
 Para executar o programa, entre no diretório do projeto pelo terminal ou CMD. Execute `./main <arquivo>`, onde o arquivo é o caminho de um dos arquivos `.txt` (*1.txt, 2.txt, 3.txt*).
 
-***No Replit, entre no Shell e execute os passos listados acima.***
+***No Replit, entre no Shell (canto inferior esquerdo: Tools->Shell) e execute os passos listados acima.***
 
 ## Objetivo
 
